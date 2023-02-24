@@ -20,11 +20,12 @@ class _AppState extends State<App> {
   //StatefulWidget의 두 번째 부분: state가 있는 위젯
   //state가 바뀌면 ui 새로고침되면서 업데이트
   //State<App>는 data(ex. counter)와 ui를(ex. Text) 갖는다
-  int counter = 0;
+  List<int> numbers = [];
 
   void onClicked() {
     setState(() {
-      counter = counter + 1;
+      print(numbers);
+      numbers.add(numbers.length);
     });
     //setState 함수는 State<App> class에게 데이터가 변경됐다고 알려주는 함수
     //이걸 호출해야 flutter가 data가 업데이트 됐다는 걸 확인하고 build method가 다시 실행되면서 ui가 새로고침 되는 것
@@ -46,10 +47,7 @@ class _AppState extends State<App> {
                 'Click Count',
                 style: TextStyle(fontSize: 30),
               ),
-              Text(
-                '$counter',
-                style: const TextStyle(fontSize: 30),
-              ),
+              for (var n in numbers) Text('$n'),
               IconButton(
                   iconSize: 40,
                   onPressed: onClicked,
