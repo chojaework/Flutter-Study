@@ -116,6 +116,8 @@ class App extends StatelessWidget {
                 height: 20,
               ),
               Container(
+                clipBehavior: Clip.hardEdge,
+                //넘치는 부분을 자르기 위해 사용
                 decoration: BoxDecoration(
                   color: const Color(0xff1f2123),
                   borderRadius: BorderRadius.circular(20),
@@ -123,6 +125,7 @@ class App extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(30),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,6 +160,20 @@ class App extends StatelessWidget {
                             ],
                           ),
                         ],
+                      ),
+                      Transform.scale(
+                        // 로고가 넘치게끔 만들기 위해 scale 위젯으로 Wrap 한다
+                        scale: 2.2, //배 넘친다
+                        child: Transform.translate(
+                          //로고를 아래로 내리기 위해 translate 위젯으로 Wrap 한다
+                          offset:
+                              const Offset(-5, 12), //x축으로 -5만큼, y축으로 12만큼 이동
+                          child: const Icon(
+                            Icons.euro_rounded,
+                            color: Colors.white,
+                            size: 88, //size값을 변경하면 카드 자체가 커진다
+                          ),
+                        ),
                       ),
                     ],
                   ),
