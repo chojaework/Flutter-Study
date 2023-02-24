@@ -17,43 +17,28 @@ class App extends StatefulWidget {
 //Stateful Widget의 첫 번째 부분: state가 없는 위젯
 
 class _AppState extends State<App> {
-  //StatefulWidget의 두 번째 부분: state가 있는 위젯
-  //state가 바뀌면 ui 새로고침되면서 업데이트
-  //State<App>는 data(ex. counter)와 ui를(ex. Text) 갖는다
-  List<int> numbers = [];
-
-  void onClicked() {
-    setState(() {
-      print(numbers);
-      numbers.add(numbers.length);
-    });
-    //setState 함수는 State<App> class에게 데이터가 변경됐다고 알려주는 함수
-    //이걸 호출해야 flutter가 data가 업데이트 됐다는 걸 확인하고 build method가 다시 실행되면서 ui가 새로고침 되는 것
-    //counter = counter + 1;
-    //setState((){});
-    //이렇게 작성해도 같은 결과
-  }
-
   @override
   Widget build(BuildContext context) {
+    //context는 위젯 트리에서 모든 부모요소들에 대한 정보이다
+    //BuildContext 위젯을 통해 누가 부모요소인지 알 수 있고 맨 위 부모 요소에도 접근할 수 있다
+    //A handle to the location of a widget in the widget tree.
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.red,
+            //Theme만 작성해서는 화면에 변화가 없다
+            //따라서 build context 사용해야 한다
+          ),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xfff4eddb),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Click Count',
-                style: TextStyle(fontSize: 30),
-              ),
-              for (var n in numbers) Text('$n'),
-              IconButton(
-                  iconSize: 40,
-                  onPressed: onClicked,
-                  icon: const Icon(
-                    Icons.add_box_rounded,
-                  ))
+            children: const [
+              MyLargeTitle(),
             ],
           ),
         ),
@@ -61,4 +46,26 @@ class _AppState extends State<App> {
     );
   }
 }
-//State가 바뀔 때마다 UI가 새로고침되면서 최신 데이터를 보여준다
+
+class MyLargeTitle extends StatelessWidget {
+  const MyLargeTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    //context는 My Large Title Text의 부모 요소들의 모든 정보를 포함
+    return Text(
+      'My Large Title',
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context).textTheme.titleLarge!.color,
+        //현재 context의 Theme을 찾아서 책을 가져오는 것
+        //titleLarge!라고 쓰는 이유는 color가 null이 아님을 알려주기 위한 것
+        //titleLarge?라고 써도 된다
+        //! : I'M SURRRRE, ? : maybe?
+      ),
+    );
+  }
+}
+//_AppState widget과 분리된 MyLargeTitle widget을 생성한 것
