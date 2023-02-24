@@ -23,7 +23,14 @@ class _AppState extends State<App> {
   int counter = 0;
 
   void onClicked() {
-    counter = counter + 1;
+    setState(() {
+      counter = counter + 1;
+    });
+    //setState 함수는 State<App> class에게 데이터가 변경됐다고 알려주는 함수
+    //이걸 호출해야 flutter가 data가 업데이트 됐다는 걸 확인하고 build method가 다시 실행되면서 ui가 새로고침 되는 것
+    //counter = counter + 1;
+    //setState((){});
+    //이렇게 작성해도 같은 결과
   }
 
   @override
