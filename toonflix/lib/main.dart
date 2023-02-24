@@ -1,153 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:toonflix/widgets/button.dart';
-import 'package:toonflix/widgets/currency_card.dart';
 
 void main() {
   runApp(const App());
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
+  //이전에 사용한 StatelessWidget은 build 메서드를 통해 단지 UI만 출력
+  //App이 StatefulWidget을 상속
+  //다시 말해서 App class는 StatefulWidget이 가지고 있는 걸 전부 포함
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+  //StatefulWidget에 있는 createState() State에 추가하기 위한 함수
+}
+//Stateful Widget의 첫 번째 부분: state가 없는 위젯
+
+class _AppState extends State<App> {
+  //StatefulWidget의 두 번째 부분: state가 있는 위젯
+  //state가 바뀌면 ui 새로고침되면서 업데이트
+  //State<App>는 data(ex. counter)와 ui를(ex. Text) 갖는다
+  int counter = 0;
+
+  void onClicked() {
+    counter = counter + 1;
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: const Color(0xFF181818),
-        body: SingleChildScrollView(
-          //원래는 3개의 카드를 생성하면 칸이 부족해서 overflow가 발생하는데 이 위젯으로 wrap 해주면 사라진다
-          //스크롤 가능해짐
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 80,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'Hey, Selena',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        Text(
-                          'Welcome back',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 70,
-                ),
-                Text(
-                  'Total Balance',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                const Text(
-                  '\$5 194 482',
-                  style: TextStyle(
-                      fontSize: 48,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Button(
-                        text: 'Transfer',
-                        bgColor: Color(0xfff1b33b),
-                        textColor: Colors.black),
-                    Button(
-                        text: 'Request',
-                        bgColor: Color(0xff1f2123),
-                        textColor: Colors.white),
-                  ],
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-                Row(
-                  //바닥에 붙도록 만들기 위해서
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  //둘을 양옆으로 떨어뜨리기 위해서
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //원래 children: const [ 였는데 Opacity는 정확한 값을 알기 어렵기 때문에 오류를 발생시킨다.
-                  //이를 해결하기 위해 const를 지워줘야 한다.
-                  children: [
-                    const Text(
-                      'Wallets',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 36,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      'View All',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const CurrencyCard(
-                  name: 'Euro',
-                  code: "EUR",
-                  amount: '6 428',
-                  icon: Icons.euro_rounded,
-                  isInverted: false,
-                  offset: 0,
-                ),
-                const CurrencyCard(
-                  name: 'Bitcoin',
-                  code: "BTC",
-                  amount: '9 785',
-                  icon: Icons.currency_bitcoin,
-                  isInverted: true,
-                  offset: -20,
-                ),
-                const CurrencyCard(
-                  name: 'Dollar',
-                  code: "USD",
-                  amount: '428',
-                  icon: Icons.attach_money_outlined,
-                  isInverted: false,
-                  offset: -40,
-                ),
-              ],
-            ),
+        backgroundColor: const Color(0xfff4eddb),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Click Count',
+                style: TextStyle(fontSize: 30),
+              ),
+              Text(
+                '$counter',
+                style: const TextStyle(fontSize: 30),
+              ),
+              IconButton(
+                  iconSize: 40,
+                  onPressed: onClicked,
+                  icon: const Icon(
+                    Icons.add_box_rounded,
+                  ))
+            ],
           ),
         ),
       ),
     );
   }
 }
+//State가 바뀔 때마다 UI가 새로고침되면서 최신 데이터를 보여준다
