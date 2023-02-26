@@ -17,6 +17,13 @@ class App extends StatefulWidget {
 //Stateful Widget의 첫 번째 부분: state가 없는 위젯
 
 class _AppState extends State<App> {
+  bool showTitle = true;
+  void toggleTitle() {
+    setState(() {
+      showTitle = !showTitle;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //context는 위젯 트리에서 모든 부모요소들에 대한 정보이다
@@ -37,8 +44,11 @@ class _AppState extends State<App> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              MyLargeTitle(),
+            children: [
+              showTitle ? const MyLargeTitle() : const Text('nothing'),
+              IconButton(
+                  onPressed: toggleTitle,
+                  icon: const Icon(Icons.remove_red_eye)),
             ],
           ),
         ),
@@ -47,14 +57,38 @@ class _AppState extends State<App> {
   }
 }
 
-class MyLargeTitle extends StatelessWidget {
+class MyLargeTitle extends StatefulWidget {
   const MyLargeTitle({
     super.key,
   });
 
   @override
+  State<MyLargeTitle> createState() => _MyLargeTitleState();
+}
+
+class _MyLargeTitleState extends State<MyLargeTitle> {
+  //StatefulWidget으로 바뀌면 생긴다
+  //initState 메서드를 가지고 있다.
+
+  @override
+  void initState() {
+    //부모 요소에 의존하는 데이터를 초기화해야 하는 경우 initState를 사용한다
+    //initState는 build보다 먼저 호출돼야 하고 먼저 사용된다
+    super.initState();
+    print('initState');
+  }
+
+  @override
+  void dispose() {
+    //dispose는 위젯이 스크린에서 제거될 때 호출되는 메서드
+    super.dispose();
+    print('dispose');
+  }
+
+  @override
   Widget build(BuildContext context) {
     //context는 My Large Title Text의 부모 요소들의 모든 정보를 포함
+    print('build');
     return Text(
       'My Large Title',
       style: TextStyle(
