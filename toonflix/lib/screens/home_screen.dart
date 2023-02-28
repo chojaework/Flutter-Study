@@ -30,6 +30,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void restart() {
+    //멈춘 뒤 초기화하는 것만 가능하다고 가정
+    setState(() {
+      totalPomodoros = 0;
+    });
+    timer.cancel();
+    totalSeconds = tweentyFiveMinutes;
+  }
+
   void onStartPressed() {
     //재생 버튼이 눌리면 실행하는 함수
     timer = Timer.periodic(
@@ -99,6 +108,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(isRunning
                     ? Icons.pause_circle_outline
                     : Icons.play_circle_outline),
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Center(
+              child: IconButton(
+                iconSize: 60,
+                color: Theme.of(context).cardColor,
+                onPressed: restart,
+                icon: const Icon(Icons.restart_alt),
               ),
             ),
           ),
