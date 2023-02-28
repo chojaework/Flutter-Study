@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,6 +9,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int totalSeconds = 1500;
+  late Timer timer;
+  //late는 나중에 초기화할 거라는 의미
+  void onTick(Timer timer) {
+    setState(() {
+      totalSeconds = totalSeconds - 1;
+    });
+  }
+
+  void onStartPressed() {
+    //재생 버튼이 눌리면 실행하는 함수
+    timer = Timer.periodic(
+      //기본형: Timer.periodic(duration, (timer) { })
+      //periodic은 duration(주기)마다 (timer) {} 이 함수를 실행
+      const Duration(seconds: 1), //1초마다 아래의 함수를 실행하겠다는 뜻
+      onTick,
+    );
+    //onTick()는 함수를 실행하는 걸 의미하기 때문에 ()넣지 않아야 한다
+    //실행하면서 flutter에서 자동으로 넣어서 실행시켜준다
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.bottomCenter,
               //25:00이라는 숫자가 베젤에 가려져서 안보이는 문제를 해결하기 위한 것
               child: Text(
-                '25:00',
+                '$totalSeconds',
                 style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 89,
@@ -37,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IconButton(
                 iconSize: 120,
                 color: Theme.of(context).cardColor,
-                onPressed: () {},
+                onPressed: onStartPressed,
                 icon: const Icon(
                   Icons.play_circle_outline,
                 ),
@@ -52,8 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   //Expanded를 안 쓰면 아래 자식들이 왼쪽 하단에만 표시된다
                   //Expanded를 써야지 전체 하단에 표시 가능
                   child: Container(
-                    decoration:
-                        BoxDecoration(color: Theme.of(context).cardColor),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
