@@ -15,6 +15,7 @@ class App extends StatelessWidget {
     //A handle to the location of a widget in the widget tree.
     return MaterialApp(
       theme: ThemeData(
+        //ThemeData는 앱의 모든 스타일을 한 곳에서 지정하기 위한 위젯
         colorScheme: ColorScheme.fromSwatch(
           backgroundColor: const Color(0xffe7626c),
         ),
