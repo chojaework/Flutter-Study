@@ -7,26 +7,15 @@ void main() {
 
 class App extends StatelessWidget {
   const App({super.key});
+  //위젯은 ID같은 식별자 역할을 하는 key가 있다
+  //flutter가 위젯을 빠르게 찾을 수 있게 하기 위한 것이다
 
   @override
   Widget build(BuildContext context) {
-    //context는 위젯 트리에서 모든 부모요소들에 대한 정보이다
-    //BuildContext 위젯을 통해 누가 부모요소인지 알 수 있고 맨 위 부모 요소에도 접근할 수 있다
-    //A handle to the location of a widget in the widget tree.
     return MaterialApp(
-      theme: ThemeData(
-        //ThemeData는 앱의 모든 스타일을 한 곳에서 지정하기 위한 위젯
-        colorScheme: ColorScheme.fromSwatch(
-          backgroundColor: const Color(0xffe7626c),
-        ),
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(
-            color: Color(0xFF232B55),
-          ),
-        ),
-        cardColor: const Color(0xFFF4EDDB),
+      home: Container(
+        child: const HomeScreen(),
       ),
-      home: const HomeScreen(),
     );
   }
 }
