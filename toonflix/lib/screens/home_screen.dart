@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int totalSeconds = 1500;
+  bool isRunning = false;
   late Timer timer;
   //late는 나중에 초기화할 거라는 의미
   void onTick(Timer timer) {
@@ -28,6 +29,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     //onTick()는 함수를 실행하는 걸 의미하기 때문에 ()넣지 않아야 한다
     //실행하면서 flutter에서 자동으로 넣어서 실행시켜준다
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  void onPausePressed() {
+    //정지버튼을 누르면
+    timer.cancel();
+    //timer를 멈추는 기능
+    setState(() {
+      isRunning = false;
+    });
   }
 
   @override
@@ -59,10 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IconButton(
                 iconSize: 120,
                 color: Theme.of(context).cardColor,
-                onPressed: onStartPressed,
-                icon: const Icon(
-                  Icons.play_circle_outline,
-                ),
+                onPressed: isRunning ? onPausePressed : onStartPressed,
+                //isRunning 중이라면 정지 버튼을 누른것이고, 아니라면 재생 버튼을 누른것이다
+                icon: Icon(isRunning
+                    ? Icons.pause_circle_outline
+                    : Icons.play_circle_outline),
               ),
             ),
           ),
