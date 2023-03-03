@@ -2,35 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  List<WebtoonModel> webtoons = [];
-  bool isLoading = true;
-
-  void WaitForWebtoons() async {
-    webtoons = await ApiService.getTodaysToons();
-    isLoading = false;
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WaitForWebtoons();
-    //initState에서 데이터를 받아오는 함수를 호출한다.
-    //WaitFortoons는 await하고 받아오기가 끝나면 그 데이터를 webtoons에 넣는다
-  }
+  Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToons();
 
   @override
   Widget build(BuildContext context) {
-    print(webtoons);
-    print(isLoading);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -43,6 +21,20 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 24,
           ),
         ),
+      ),
+      body: FutureBuilder(
+        //FutureBuilder는 future 값을 기다리고, 데이터가 존재하는지 알려준다
+        builder: (context, snapshot) {
+          //builder는 UI를 그려주는 함수
+          //snapshot은 Future의 상태 -> 로딩중인지, 데이터가 있는지, 에러가 났는지 알 수 있다
+          if (snapshot.hasData) {
+            return const Text("There is data!");
+          }
+          return const Text('Loading....');
+        },
+        future: webtoons,
+        //future에는 기다려야하는 값인 webtoons를 할당
+        //FutureBuilder가 자동으로 await를 적용시켜준다
       ),
     );
   }
