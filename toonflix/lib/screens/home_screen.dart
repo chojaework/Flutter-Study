@@ -28,26 +28,15 @@ class HomeScreen extends StatelessWidget {
           //builder는 UI를 그려주는 함수
           //snapshot은 Future의 상태 -> 로딩중인지, 데이터가 있는지, 에러가 났는지 알 수 있다
           if (snapshot.hasData) {
-            return ListView.separated(
-              //그냥 ListView를 사용하는 것보다 좀 더 최적화되었다
-              scrollDirection: Axis.horizontal,
-              //스크롤 방향: 수평
-              itemCount: snapshot.data!.length,
-              //총 웹툰의 개수
-              itemBuilder: (context, index) {
-                print(index);
-                //사용자가 보고 있는 아이템만 build가능
-                //사용자가 보고 있지 않으면 ListView.builder는 해당 아이템을 삭제
-                //itemBuilder는 인덱스가 0, 1, 2...인 아이템이 build 됐다고 알려준다
-                var webtoon = snapshot.data![index];
-                return Text(webtoon.title);
-              },
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 20,
-              ),
-              //ListView.separated는 separatorBuilder 위젯을 필수로 한다
-              //이 위젯은 리스트 아이템 사이에 렌더된다(?)
-              //실행하면 width를 20으로 갖고 텍스트가 배치된다
+            //makeList를 메소드로 바꿨다
+            return Column(
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                Expanded(child: makeList(snapshot))
+                //LisView의 크기를 지정해주기 위한 것
+              ],
             );
             //Text 대신에 ListView 사용
             //많은 양의 데이터를 연속적으로 보여주고 싶을 때 사용
@@ -61,6 +50,68 @@ class HomeScreen extends StatelessWidget {
         //future에는 기다려야하는 값인 webtoons를 할당
         //FutureBuilder가 자동으로 await를 적용시켜준다
       ),
+    );
+  }
+
+  ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
+    return ListView.separated(
+      //그냥 ListView를 사용하는 것보다 좀 더 최적화되었다
+      scrollDirection: Axis.horizontal,
+      //스크롤 방향: 수평
+      itemCount: snapshot.data!.length,
+      //총 웹툰의 개수
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 20,
+      ),
+      //사진 간 좌우 간격 설정해 주기 위해서
+      itemBuilder: (context, index) {
+        // print(index);
+        //사용자가 보고 있는 아이템만 build가능
+        //사용자가 보고 있지 않으면 ListView.builder는 해당 아이템을 삭제
+        //itemBuilder는 인덱스가 0, 1, 2...인 아이템이 build 됐다고 알려준다
+        var webtoon = snapshot.data![index];
+        return Column(
+          children: [
+            Container(
+              width: 250,
+              clipBehavior: Clip.hardEdge,
+              //clipBehavior는 자식의 부모 영역 침범을 제어하는 방법
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                //그냥 이렇게만 설정하면 clipBehavior 때문에 적용이 안되므로 위에 clipBehavior 설정해줘야 한다
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 15,
+                    //번지는 그라데이션 설정
+                    offset: const Offset(10, 10),
+                    //그림자 방향 설정
+                    color: Colors.black.withOpacity(0.5),
+                    //불투명함 설정
+                  )
+                ],
+              ),
+              child: Image.network(webtoon.thumb),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              webtoon.title,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) => const SizedBox(
+        width: 40,
+      ),
+      //ListView.separated는 separatorBuilder 위젯을 필수로 한다
+      //이 위젯은 리스트 아이템 사이에 렌더된다(?)
+      //실행하면 width를 20으로 갖고 텍스트가 배치된다
     );
   }
 }
