@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
+import 'package:toonflix/widgets/webtoon_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -10,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
         elevation: 2,
         backgroundColor: Colors.white,
@@ -71,39 +72,10 @@ class HomeScreen extends StatelessWidget {
         //사용자가 보고 있지 않으면 ListView.builder는 해당 아이템을 삭제
         //itemBuilder는 인덱스가 0, 1, 2...인 아이템이 build 됐다고 알려준다
         var webtoon = snapshot.data![index];
-        return Column(
-          children: [
-            Container(
-              width: 250,
-              clipBehavior: Clip.hardEdge,
-              //clipBehavior는 자식의 부모 영역 침범을 제어하는 방법
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                //그냥 이렇게만 설정하면 clipBehavior 때문에 적용이 안되므로 위에 clipBehavior 설정해줘야 한다
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 15,
-                    //번지는 그라데이션 설정
-                    offset: const Offset(10, 10),
-                    //그림자 방향 설정
-                    color: Colors.black.withOpacity(0.5),
-                    //불투명함 설정
-                  )
-                ],
-              ),
-              child: Image.network(webtoon.thumb),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              webtoon.title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
+        return Webtoon(
+          title: webtoon.title,
+          thumb: webtoon.thumb,
+          id: webtoon.id,
         );
       },
       separatorBuilder: (context, index) => const SizedBox(
