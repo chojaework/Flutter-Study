@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toonflix/models/webtoon_detail_model.dart';
 import 'package:toonflix/models/webtoon_episode_model.dart';
 import 'package:toonflix/services/api_service.dart';
@@ -26,6 +27,29 @@ class _DetailScreenState extends State<DetailScreen> {
   late Future<WebtoonDetailModel> webtoon;
   //webtoon은 initState에서 정의할 것이다
   late Future<List<WebtoonEpisodeModel>> episodes;
+  late SharedPreferences prefs;
+  bool isLiked = false;
+  //좋아요 누른 상태
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    //사용자 저장소에 connection이 생긴 것이다
+    final likedToons = prefs.getStringList('likedToons');
+    //getStringList의 return 타입은 List?이므로 List일 수도 있고 아닐수도 있다
+    if (likedToons != null) {
+      //이미 likedToons라는 List가 있는 경우
+      if (likedToons.contains(widget.id) == true) {
+        //현재 클릭한 웹툰에 좋아요 눌렀던 경우
+        setState(() {
+          isLiked = true;
+        });
+        //setState 해줘야 어플을 다시 실행했을 때 이전의 좋아요 결과를 반영
+      }
+    } else {
+      await prefs.setStringList('likedToons', []);
+      //이용자가 처음으로 앱을 이용하면 likedToons가 존재하지 않을 것이므로 여기서 생성해준다
+    }
+  }
 
   @override
   void initState() {
@@ -35,6 +59,24 @@ class _DetailScreenState extends State<DetailScreen> {
     //아래랑 마찬가지로 widget.id로 작성해야 한다
     //id가 있는 위의 클래스와 다른 클래스에 있기 때문이다
     episodes = ApiService.getLatestEpisodesById(widget.id);
+    initPrefs();
+  }
+
+  onHeartTap() async {
+    final likedToons = prefs.getStringList('likedToons');
+    if (likedToons != null) {
+      if (isLiked) {
+        likedToons.remove(widget.id);
+        //좋아요 버튼을 눌렀을 때 이미 눌려진 상태라면 눌린 걸 없애고
+      } else {
+        likedToons.add(widget.id);
+        //안 눌려진 상태라면 누른다
+      }
+      await prefs.setStringList('likedToons', likedToons);
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
   }
 
   @override
@@ -45,6 +87,13 @@ class _DetailScreenState extends State<DetailScreen> {
         elevation: 2,
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: onHeartTap,
+            icon: Icon(
+                isLiked ? Icons.favorite : Icons.favorite_outline_outlined),
+          ),
+        ],
         title: Text(
           widget.title, //오늘의 웹툰이 아니라 title을 작성
           //statelesswidget에서는 그냥 title이었는데 statefulwidget으로 바꾸면서 widget.title로 작성해야 한다
