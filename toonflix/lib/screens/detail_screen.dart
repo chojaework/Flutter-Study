@@ -35,25 +35,28 @@ class DetailScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             //사진을 가운데로 가져온다
             children: [
-              Container(
-                width: 250,
-                clipBehavior: Clip.hardEdge,
-                //clipBehavior는 자식의 부모 영역 침범을 제어하는 방법
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  //그냥 이렇게만 설정하면 clipBehavior 때문에 적용이 안되므로 위에 clipBehavior 설정해줘야 한다
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 15,
-                      //번지는 그라데이션 설정
-                      offset: const Offset(10, 10),
-                      //그림자 방향 설정
-                      color: Colors.black.withOpacity(0.5),
-                      //불투명함 설정
-                    )
-                  ],
+              Hero(
+                tag: id,
+                child: Container(
+                  width: 250,
+                  clipBehavior: Clip.hardEdge,
+                  //clipBehavior는 자식의 부모 영역 침범을 제어하는 방법
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    //그냥 이렇게만 설정하면 clipBehavior 때문에 적용이 안되므로 위에 clipBehavior 설정해줘야 한다
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 15,
+                        //번지는 그라데이션 설정
+                        offset: const Offset(10, 10),
+                        //그림자 방향 설정
+                        color: Colors.black.withOpacity(0.5),
+                        //불투명함 설정
+                      )
+                    ],
+                  ),
+                  child: Image.network(thumb),
                 ),
-                child: Image.network(thumb),
               ),
             ],
           ),

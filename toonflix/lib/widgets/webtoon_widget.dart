@@ -36,25 +36,33 @@ class Webtoon extends StatelessWidget {
       },
       child: Column(
         children: [
-          Container(
-            width: 250,
-            clipBehavior: Clip.hardEdge,
-            //clipBehavior는 자식의 부모 영역 침범을 제어하는 방법
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              //그냥 이렇게만 설정하면 clipBehavior 때문에 적용이 안되므로 위에 clipBehavior 설정해줘야 한다
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 15,
-                  //번지는 그라데이션 설정
-                  offset: const Offset(10, 10),
-                  //그림자 방향 설정
-                  color: Colors.black.withOpacity(0.5),
-                  //불투명함 설정
-                )
-              ],
+          Hero(
+            //Hero는 두 화면 사이에 에니메이션을 주는 컴포넌트
+            //Hero 위젯을 두 개의 화면에 각각 사용하고
+            //각각의 위젯에 같은 태그를 주기만 하면 된다
+            tag: id,
+            //Webtoon의 id이다
+            //Detail Screen과 연관된 부분
+            child: Container(
+              width: 250,
+              clipBehavior: Clip.hardEdge,
+              //clipBehavior는 자식의 부모 영역 침범을 제어하는 방법
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                //그냥 이렇게만 설정하면 clipBehavior 때문에 적용이 안되므로 위에 clipBehavior 설정해줘야 한다
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 15,
+                    //번지는 그라데이션 설정
+                    offset: const Offset(10, 10),
+                    //그림자 방향 설정
+                    color: Colors.black.withOpacity(0.5),
+                    //불투명함 설정
+                  )
+                ],
+              ),
+              child: Image.network(thumb),
             ),
-            child: Image.network(thumb),
           ),
           const SizedBox(
             height: 10,

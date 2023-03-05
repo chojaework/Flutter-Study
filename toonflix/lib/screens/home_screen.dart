@@ -35,7 +35,9 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                Expanded(child: makeList(snapshot))
+                Expanded(
+                  child: makeList(snapshot),
+                ),
                 //LisView의 크기를 지정해주기 위한 것
               ],
             );
@@ -83,7 +85,7 @@ class HomeScreen extends StatelessWidget {
       ),
       //ListView.separated는 separatorBuilder 위젯을 필수로 한다
       //이 위젯은 리스트 아이템 사이에 렌더된다(?)
-      //실행하면 width를 20으로 갖고 텍스트가 배치된다
+      //실행하면 width를 40으로 갖고 텍스트가 배치된다
     );
   }
 }
